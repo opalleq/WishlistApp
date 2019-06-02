@@ -24,7 +24,7 @@
     </div>
 
     <div class="centered">
-      <button class="btn {'disabled': isDisabled}"
+      <button v-bind:class="['btn', {'disabled': isDisabled}]"
       :disabled=isDisabled>
       Create a wish!
       </button>
