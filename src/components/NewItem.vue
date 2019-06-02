@@ -1,0 +1,128 @@
+<template>
+<div class="create-form">
+  <h2 class="create-form-header">Make a new wish!</h2>
+  <form v-on:submit.prevent="onSubmit">
+    <div class="form-item">
+      <label>What I want:</label>
+      <input class="form-item-input" type="text" name="name" v-model="name"/>
+    </div>
+
+    <div class="form-item">
+      <label>Write some words about:</label>
+      <textarea class="form-item-input" name="descr" v-model="description"></textarea>
+    </div>
+
+    <div class="form-item">
+      <label>Paste a link to image:</label>
+      <input class="form-item-input" type="text" name="link" v-model="picLink"/>
+    </div>
+
+	  <div class="form-item">
+      <label>Or upload file:</label>
+	  <input class="form-item-input" type="file" accept="image/*" name="file" v-on:change="uploadFile">
+	  <button v-on:click="uploadImg">Upload</button>
+    </div>
+
+    <div class="centered">
+      <button class="btn {'disabled': isDisabled}"
+      :disabled=isDisabled>
+      Create a wish!
+      </button>
+    </div>
+  </form>
+  </div>
+</template>
+
+<script>
+import service from '../services/service';
+import { listener } from '../main';
+
+export default {
+  name: 'NewItem',
+  data: () => ({
+    wishes: [],
+    wish: {},
+    name: '',
+    description: '',
+    picLink: '',
+    uploadedFile: {name: ''},
+    uploaded: false
+  }),
+  methods: {
+    onSubmit() {
+     const data = {
+                name: this.name || '',
+                description: this.description || '',
+                pic: (this.uploaded ? '/uploads/' + this.uploadedFile.name : this.picLink) || ''
+              };
+     service.addItem(data).then(data => {
+        listener.$emit('itemsListUpdated');
+        this.clearForm();
+     });
+    },
+    onUpload() {
+    service.uploadItem(this.uploadedFile);
+    },
+    clearForm() {
+        this.name = '';
+        this.description = '';
+        this.picLink = '';
+    },
+    uploadImg(event) {
+        event.preventDefault();
+        if (this.uploadedFile) {
+          service.uploadItem(this.uploadedFile).then(data => {
+            this.uploaded = true;
+          });
+        }
+    },
+    uploadFile(event) {
+        this.uploadedFile = event.target.files[0];
+    }
+  },
+  computed: {
+    isDisabled: function() {
+      return !this.name && !this.description && !this.picLink;
+    }
+  }
+};
+</script>
+
+<style scoped>
+.create-form {
+  width: 560px;
+  margin: 20px auto 42px;
+  padding: 12px 32px 24px;
+  border: 1px solid #E3ECF9;
+  border-radius: 4px;
+}
+
+.create-form-header{
+  color: #1EB98E;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.wishlist-wrapper {
+  width: 1024px;
+  margin: 0 auto;
+}
+
+.form-item {
+  margin-bottom: 18px;
+}
+
+.form-item label {
+    display: inline-block;
+    width: 160px;
+}
+
+.form-item-input {
+  width: 250px;
+  padding: 6px 12px;
+  font-family: Verdana, sans-serif;
+  font-size: 15px;
+  vertical-align: middle;
+}
+</style>
