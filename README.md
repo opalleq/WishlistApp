@@ -1,2 +1,6 @@
 # WishlistApp
-Wishlist app using MEVN stack
+A simple wishlist app using MEVN stack
+
+- run Mongo
+- npm start
+- npm run build

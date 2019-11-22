@@ -15,7 +15,7 @@ app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-mongoose.connect('mongodb://localhost/my_database');
+mongoose.connect('mongodb://localhost/my_database', { useNewUrlParser: true, useCreateIndex: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
