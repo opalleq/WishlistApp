@@ -91,7 +91,7 @@ export default {
 <style scoped>
 .create-form {
   width: 560px;
-  margin: 20px auto 42px;
+  margin: 32px auto 24px;
   padding: 12px 32px 24px;
   border: 1px solid #E3ECF9;
   border-radius: 4px;
@@ -124,5 +124,19 @@ export default {
   font-family: Verdana, sans-serif;
   font-size: 15px;
   vertical-align: middle;
+  border: 2px solid transparent;
+  box-shadow: inset 0px 0px 1px 1px #cacaca;
+}
+
+.form-item-input:focus {
+  outline: none;
+  border: 2px solid #77d4bb;
+  box-shadow: none;
+}
+
+.form-item-input[type="file"], .form-item-input[type="file"]:focus {
+  padding-left: 2px;
+  border: none;
+  box-shadow: none;
 }
 </style>

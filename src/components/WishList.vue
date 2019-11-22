@@ -3,7 +3,7 @@
   <h3 class="wish-counter" v-if="wishes.length">You've got {{ getTotal()}}</span>!</h3>
   <h3 class="wish-counter" v-else>You haven't created any wish yet.</h3>
 
-  <div class="view-mode-wrapper">View as:
+  <div class="view-mode-wrapper" v-if="wishes.length">View as:
     <span :class="[{ active: this.viewMode === 'table' }, 'view-mode']" v-on:click="toggleViewMode('table')">table</span>
     <span :class="[{active: this.viewMode === 'list'}, 'view-mode']" v-on:click="toggleViewMode('list')">list</span>
   </div>
@@ -100,7 +100,7 @@ export default {
 }
 
 .wish-items-table .wish-item:hover {
-  border: 2px solid #6B98DC;
+  border: 2px solid #77d4bb;
 }
 
 .wish-items-table .wish-img-wrapper {
@@ -119,7 +119,7 @@ export default {
   position: absolute;
   top: -10px;
   right: 5px;
-  border: 2px solid #6B98DC;
+  border: 2px solid #77d4bb;
   border-radius: 20px;
   width: 20px;
   height: 20px;
@@ -138,6 +138,11 @@ export default {
   border-top: 1px solid #cacaca;
   border-left: 1px solid #cacaca;
   border-right: 1px solid #cacaca;
+  color: #3c3c3c;
+}
+
+.wish-items-list .wish-item:hover {
+    background-color: rgba(119, 212, 187, .1);
 }
 
 .wish-items-list .wish-item:last-child {
@@ -150,6 +155,10 @@ export default {
   display: flex;
   align-items: center;
   border-right: 1px solid #cacaca;
+}
+
+.wish-items-list .wish-img-wrapper img {
+  margin: 0 auto;
 }
 
 .wish-items-list .wish-item-pic {
