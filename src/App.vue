@@ -1,24 +1,12 @@
 <template>
   <div id="app">
-   <NewItem :wishes="wishes" />
-   <WishList :wishes="wishes" />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import NewItem from '@/components/NewItem';
-import WishList from '@/components/WishList';
-
 export default {
-    name: 'App',
-    components: {
-      NewItem,
-      WishList
-    },
-    data: () => ({
-      totalWishes: 0,
-      wishes: []
-    })
+  name: "App",
 };
 </script>
 
@@ -28,8 +16,9 @@ export default {
   padding: 0;
 }
 
-html, body {
-  font-family: 'Verdana', sans-serif;
+html,
+body {
+  font-family: "Verdana", sans-serif;
   font-size: 14px;
 }
 
@@ -48,25 +37,37 @@ div {
 
 .btn {
   text-transform: uppercase;
-  background: #1EB98E;
-  border: 2px solid #20A07D;
+  background: #1eb98e;
+  border: 2px solid #20a07d;
   border-radius: 20px;
   padding: 10px 20px;
   cursor: pointer;
-  font-family: 'Verdana', sans-serif;
+  font-family: "Verdana", sans-serif;
   font-size: 15px;
   color: #fff;
   letter-spacing: 1px;
 }
 .btn:hover {
-  background: #20A07D;
+  background: #20a07d;
 }
 .btn:focus {
   outline: none;
 }
 .btn.disabled {
-  background: #1EB98E;
+  background: #1eb98e;
   cursor: default;
-  opacity: .6;
+  opacity: 0.6;
+}
+.btn-icon {
+  outline: none;
+  border: none;
+  color: #1eb9b9;
+  width: 32px;
+  border-radius: 4px;
+  font-size: 24px;
+  cursor: pointer;
+}
+.btn-icon:hover {
+  background: #e2fbfb;
 }
 </style>

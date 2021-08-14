@@ -1,6 +1,6 @@
 <template>
 <div class="wish-items-wrapper">
-  <h3 class="wish-counter" v-if="wishes.length">You've got {{ getTotal()}}</span>!</h3>
+  <h3 class="wish-counter" v-if="wishes.length"><span>You've got {{ getTotal()}}</span>!</h3>
   <h3 class="wish-counter" v-else>You haven't created any wish yet.</h3>
 
   <div class="view-mode-wrapper" v-if="wishes.length">View as:
@@ -9,22 +9,26 @@
   </div>
 
   <ul class="wish-items-table" v-if="viewMode ==='table'">
-    <li v-for="(wish, i) in wishes" class="wish-item" :key="i">
+    <li v-for="(wish, i) in wishes" :key="i" class="wish-item">
       <span class="action-close" v-on:click="deleteItem(wish._id)"></span>
-      <div class="wish-img-wrapper">
-        <img class="wish-item-pic" :src="wish && wish.pic || ''" width="80"/>
+      <div v-on:click="navToEdit(wish._id)">
+        <div class="wish-img-wrapper">
+          <img class="wish-item-pic" :src="wish && wish.pic || ''" width="80"/>
+        </div>
+        <h3 class="wish-item-name">{{wish.name}}</h3>
+        <p class="wish-item-descr">{{wish.description}}</p>
       </div>
-      <h3 class="wish-item-name">{{wish.name}}</h3>
-      <p class="wish-item-descr">{{wish.description}}</p>
     </li>
   </ul>
 
   <div class="wish-items-list" v-else-if="viewMode === 'list'">
-    <div v-for="(wish, i) in wishes" class="wish-item" :key="i">
-      <div class="wish-img-wrapper">
-        <img class="wish-item-pic" :src="wish && wish.pic" width="80"/>
+    <div v-for="(wish, i) in wishes" :key="i" class="wish-item">
+      <div class="wish-wrapper" v-on:click="navToEdit(wish._id)">
+        <div class="wish-img-wrapper">
+          <img class="wish-item-pic" :src="wish && wish.pic" width="80"/>
+        </div>
+        <div class="wish-item-name">{{wish.name}}</div>
       </div>
-      <div class="wish-item-name">{{wish.name}}</div>
       <div class="action-close" v-on:click="deleteItem(wish._id)"></div>
     </div>
   </div>
@@ -32,37 +36,47 @@
 </template>
 
 <script>
-import service from '../services/service';
-import { listener } from '../main';
+import service from "../services/service";
+import { listener } from "../main";
 
 export default {
-  name: 'WishList',
+  name: "WishList",
   data: () => ({
-    viewMode: 'table',
-    wishes: []
+    viewMode: "table",
+    wishes: [],
   }),
   methods: {
     async getItems() {
       const response = await service.getItems();
       this.wishes = response.data;
     },
+
     getTotal() {
-      return this.wishes.length + (this.wishes.length === 1 ? ' wish' : ' wishes');
+      return (
+        this.wishes.length + (this.wishes.length === 1 ? " wish" : " wishes")
+      );
     },
+
     toggleViewMode(mode) {
       this.viewMode = mode;
     },
+
     deleteItem(id) {
-      service.deleteItem(id)
-      .then(data => {
-        this.getItems();
-      })
-    }
+      if (window.confirm("Delete item?")) {
+        service.deleteItem(id).then(() => {
+          this.getItems();
+        });
+      }
+    },
+
+    navToEdit(id) {
+      this.$router.push({ name: "item", params: { id: id } });
+    },
   },
   mounted() {
     this.getItems();
-    listener.$on('itemsListUpdated', () => this.getItems());
-  }
+    listener.$on("itemsListUpdated", () => this.getItems());
+  },
 };
 </script>
 
@@ -79,7 +93,7 @@ export default {
 }
 
 .view-mode.active {
-  background: rgba(30, 185, 142, .4);
+  background: rgba(30, 185, 142, 0.4);
 }
 
 .wish-items-wrapper {
@@ -96,7 +110,7 @@ export default {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  margin: 0 8px 8px 0;
+  margin: 0 10px 10px 0;
 }
 
 .wish-items-table .wish-item:hover {
@@ -107,6 +121,12 @@ export default {
   width: 180px;
   height: 100px;
   margin: 0 auto 10px;
+}
+
+.wish-items-table .wish-item-descr {
+  word-break: break-all;
+  max-height: 52px;
+  overflow: hidden;
 }
 
 .wish-items-table .wish-item-pic {
@@ -124,7 +144,7 @@ export default {
   width: 20px;
   height: 20px;
   background: #fff;
-  content: '\00d7';
+  content: "\00d7";
   cursor: pointer;
 }
 
@@ -142,11 +162,16 @@ export default {
 }
 
 .wish-items-list .wish-item:hover {
-    background-color: rgba(119, 212, 187, .1);
+  background-color: rgba(119, 212, 187, 0.1);
 }
 
 .wish-items-list .wish-item:last-child {
   border-bottom: 1px solid #cacaca;
+}
+
+.wish-items-list .wish-wrapper {
+  display: flex;
+  width: 100%;
 }
 
 .wish-items-list .wish-img-wrapper {
@@ -177,7 +202,7 @@ export default {
 .wish-items-list .action-close::before {
   font-size: 30px;
   line-height: 64px;
-  content: '\00d7';
+  content: "\00d7";
   cursor: pointer;
   padding: 0 6px;
 }

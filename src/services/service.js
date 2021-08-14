@@ -4,8 +4,14 @@ export default {
     getItems() {
         return api().get('/')
     },
+    getItemById(id) {
+        return api().get(`/id/${id}`)
+    },
     addItem(params) {
         return api().post('/', params)
+    },
+    updateItem(id, params) {
+        return api().post(`/update/${id}`, params)
     },
     deleteItem(id) {
         return api().delete(`/${id}`)
